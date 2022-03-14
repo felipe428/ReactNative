@@ -1,29 +1,7 @@
 import React from 'react';
-import {View, Text, Image, Linking} from 'react-native';
+import {View, Text, StyleSheet, Image, Linking} from 'react-native';
  
-function App(){{
-
-  const styles = {
-    container: {
-      flex: 1,
-    },
-    img: {
-      width: 250,
-      height: 250,
-      marginVertical: 20,
-      alignSelf: 'center',
-    },
-    text: {
-      fontSize: 15,
-      marginHorizontal: 4,
-    },
-    title: {
-      fontWeight: 'bold',
-      fontSize: 20,
-      marginVertical: 7,
-      marginLeft:  4,
-    },
-  }
+function App(){
 
   return(
     <View style={styles.container}>
@@ -47,10 +25,32 @@ function App(){{
       <Text style={styles.text}>Não possuo experiência até o momento, estou em busca da minha primeira oportunidade profissional</Text>
         
       <Text style={styles.title}>Projetos:</Text>
-      <Text style={styles.text}>Github: <Text style={{color: '#478DFF'}} onPress={() => {Linking.openURL('https://reactnative.dev');}}>https://github.com/felipe428</Text></Text>
+      <Text style={styles.text}>Github: <Text style={{color: '#478DFF'}} onPress={() => {Linking.openURL('https://github.com/felipe428');}}>https://github.com/felipe428</Text></Text>
 
     </View>
   )
-}}
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  img: {
+    width: 250,
+    height: 250,
+    marginVertical: 20,
+    alignSelf: 'center',
+  },
+  text: {
+    fontSize: 15,
+    marginHorizontal: 4,
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    marginVertical: 7,
+    margin:  4,
+  },
+})
 
 export default App;
