@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, Pressable} from 'react-native';
- 
+
 function App (){
   
   const [numero, setNumero] = useState(0)

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Image, StyleSheet, TextInput, Pressable} from 'react-native';
- 
+
 function App (){
   
   const [peso, setPeso] = useState(0)
