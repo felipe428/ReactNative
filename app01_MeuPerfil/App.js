@@ -25,7 +25,9 @@ function App(){
       <Text style={styles.text}>Não possuo experiência até o momento, estou em busca da minha primeira oportunidade profissional</Text>
         
       <Text style={styles.title}>Projetos:</Text>
-      <Text style={styles.text}>Github: <Text style={{color: '#478DFF'}} onPress={() => {Linking.openURL('https://github.com/felipe428');}}>https://github.com/felipe428</Text></Text>
+      <Text style={styles.text}>
+        Github: <Text style={{color: '#478DFF'}} onPress={() => {Linking.openURL('https://github.com/felipe428');}}>https://github.com/felipe428</Text>
+      </Text>
 
     </View>
   )
