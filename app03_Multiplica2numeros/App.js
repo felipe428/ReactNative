@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button} from 'react-native';
- 
+
 function App (){
   
   const [n1, setN1] = useState()
