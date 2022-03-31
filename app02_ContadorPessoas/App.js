@@ -40,5 +40,5 @@ function Contador(pessoas){
     </View>
   )
 }
- 
+
 export default App;
