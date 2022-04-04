@@ -1,112 +1,136 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
+import { useState } from 'react';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+function App (){
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+  const [valor, setValor] = useState()
+  const [de, setDe] = useState('real')
+  const [para, setPara] = useState('real')
+  const [valorConvertido, setValorConvertido] = useState()
+
+  function converter(){
+    if(de === 'real' && valor) {
+      if(para === 'real') {
+        setValorConvertido(+valor)
+      } else if(para === 'dolar') {
+        setValorConvertido(+valor * 0.22)
+      } else {
+        setValorConvertido(+valor * 0.20)
+      }
+    } else if(de === 'dolar' && valor) {
+        if(para === 'real') {
+          setValorConvertido(+valor * 4.61)
+        } else if(para === 'dolar') {
+          setValorConvertido(+valor)
+        } else {
+          setValorConvertido(+valor * 0.91)
+        }
+    } else if(de === 'euro' && valor) {
+        if(para === 'real') {
+          setValorConvertido(+valor * 5.05)
+        } else if(para === 'dolar') {
+          setValorConvertido(+valor * 1.10)
+        } else {
+          setValorConvertido(+valor)
+        }
+      }
+  }
+  
+  return(
+    <View style={styles.container}>
+      <Text style={styles.title}>Conversor de Moedas</Text>
+      <Text style={styles.subtitle}>Real, Dolar, Euro</Text>
+
+      <Text style={styles.text}>Valor: </Text>
+      <TextInput style={styles.input}
+        keyboardType='numeric'
+        placeholder='Digite um valor'
+        onChangeText={ (texto) => setValor(texto) }
+      />
+
+      <Text style={styles.text}>De: </Text>
+      <Picker
+        selectedValue={de}
+        onValueChange={(texto) => setDe(texto)} 
+        enabled={true} 
+      >
+        <Picker.Item label="real" value="real" />
+        <Picker.Item label="dolar" value="dolar" />
+        <Picker.Item label="euro" value="euro" />
+      </Picker>
+
+      <Text style={styles.text}>Para: </Text>
+      <Picker
+        selectedValue={para}
+        onValueChange={(texto) => setPara(texto)} 
+        enabled={true} 
+      >
+        <Picker.Item label="real" value="real" />
+        <Picker.Item label="dolar" value="dolar" />
+        <Picker.Item label="euro" value="euro" />
+      </Picker>
+
+      <Pressable  onPress={converter}>
+        <Text style={styles.button}>
+          Converter
+        </Text>
+      </Pressable>
+      
+      <Text style={styles.resposta}>{valorConvertido}</Text>
+  
     </View>
-  );
-};
+  )
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
+}
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container:{
+    flex: 1,
+    margin: 1,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  title:{
+    textAlign: 'center',
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#F92E2E',
+    marginVertical: 3,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  subtitle:{
+    textAlign: 'center',
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: '#F92E2E',
+    marginVertical: 2,
   },
-  highlight: {
-    fontWeight: '700',
+  text:{
+    color: 'black',
+    fontSize: 20,
+    marginTop: 10,
   },
-});
+  input:{
+    height: 50,
+    borderRadius: 5, 
+    borderWidth: 1,
+    marginVertical: 10,
+    marginHorizontal: 4,
+    fontSize: 15,
+  },
+  button: {
+    marginTop: 10,
+    padding: 10,
+    marginHorizontal: 4,
+    backgroundColor: '#11A111',
+    textAlign: 'center',
+    color: 'white',
+  },
+  resposta:{
+    color: '#11A111',
+    textAlign: 'center',
+    fontSize: 28,
+    marginTop: 10,
+  },
+})
 
 export default App;
