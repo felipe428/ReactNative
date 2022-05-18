@@ -1,111 +1,201 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React, { useEffect, useState } from "react";
+import { View, Text, StatusBar, TextInput, FlatList, TouchableOpacity, StyleSheet } from "react-native";
+import { openDatabase } from "react-native-sqlite-storage";
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Fontisto from 'react-native-vector-icons/Fontisto';
+ 
+const db = openDatabase({
+  name: "rn_sqlite",
+});
+ 
+const App = () => {
+  const [produto, setProduto] = useState("");
+  const [produtos, setProdutos] = useState([]);
+  const [quantidade, setQuantidade] = useState("");
+ 
+  const createTables = () => {
+    db.transaction(txn => {
+      txn.executeSql(
+        `CREATE TABLE IF NOT EXISTS produtos (id INTEGER PRIMARY KEY AUTOINCREMENT, quantidade INT, nome VARCHAR(20))`,
+        [],
+        (sqlTxn, res) => {
+          console.log("Tabela criada com sucesso!");
+        },
+        error => {
+          console.log("error on creating table " + error.message);
+        },
+      );
+    });
+  };
 
-import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+  const deleteProduto = (id) => {
+    db.transaction(tx => {
+      tx.executeSql(`DELETE FROM produtos WHERE id = ?`, [id],
+        (sqlTxn, res) => {
+          console.log(`${produto} produtos deletado com sucesso!`);
+          setProdutos("");
+          getProdutos();
+        }, error => {
+          console.log("Erro ao deletar um produto " + error.message);
+        },
+      )
+    })
+  }
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  const incluirProduto = () => {
+    if (!produto || !quantidade) {
+      alert("Informe o produto e sua quantidade");
+      return false;
+    }
+ 
+    db.transaction(txn => {
+      txn.executeSql(
+        `INSERT INTO produtos (quantidade,nome) VALUES (?,?)`,
+        [quantidade, produto],
+        (sqlTxn, res) => {
+          console.log(` ${quantidade} ${produto} produto adicionada com sucesso!`);
+          getProdutos();
+          setProduto("");
+          setQuantidade("");
+        },
+        error => {
+          console.log("Erro ao inserir uma produto " + error.message);
+        },
+      );
+    });
+  };
+ 
+  const getProdutos = () => {
+    db.transaction(txn => {
+      txn.executeSql(
+        `SELECT * FROM produtos`,
+        [],
+        (sqlTxn, res) => {
+          console.log("Produtos lidos com sucesso!");
+          let len = res.rows.length;
+ 
+          if (len > 0) {
+            let results = [];
+            for (let i = 0; i < len; i++) {
+              let item = res.rows.item(i);
+              results.push({ id: item.id, quantidade: item.quantidade, nome: item.nome});
+            }
+ 
+            setProdutos(results);
+          }
+        },
+        error => {
+          console.log("Erro ao obter Produtos " + error.message);
+        },
+      );
+    });
+  };
+ 
+  const renderProduto = ({ item }) => {
+    return (
+      <View style={{
+        flexDirection: "row",
+        justifyContent: "space-between",
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        borderBottomWidth: 1,
+        borderColor: "#A0A0A0",
+      }}>
+          <View style={{flexDirection: "row"}}>
+            <Text style={{ fontSize: 20, color: '#B61919', fontWeight: 'bold' }}>{item.quantidade} </Text>
+            <Text style={{ fontSize: 20, color: '#494949', fontWeight: 'bold' }}>{item.nome}</Text>
+          </View>
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
+          <View>
+            <TouchableOpacity onPress={() => {deleteProduto(item.id)}}>
+              <Fontisto name='shopping-basket-remove' size={25} style={{color: "#B61919"}}/>
+            </TouchableOpacity>
+          </View>
+      </View>
+    );
+  };
+ 
+  useEffect(() => {
+    async function fetchData() {
+      await createTables();
+      await getProdutos();
+    }
+    fetchData();
+  }, []);
+
+
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+    <View style={styles.container}>
+
+      <Text style={styles.title}>Lista de compras</Text>
+ 
+      <View style={{flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
+
+        <TextInput style={styles.input}
+          placeholder="Qtd"
+          value={quantidade}
+          onChangeText={setQuantidade}
+          keyboardType='numeric'
+        />
+
+        <TextInput style={styles.input2}
+          placeholder="Produto"
+          value={produto}
+          onChangeText={setProduto}
+        />
+  
+      <View style={{alignItems: 'center', marginTop: 20, marginBottom: 20}}>
+        <TouchableOpacity style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            }}
+            onPress={incluirProduto}
+            >
+            <Fontisto name='shopping-basket-add' size={30} style={{color: "#2BCC26"}} />
+          </TouchableOpacity>
+      </View>
+    </View>
+
+      <FlatList
+        data={produtos}
+        renderItem={renderProduto}
+        key={t => t.id}
+      />
     </View>
   );
 };
-
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
-
+ 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container:{
+    flex: 1,
+    margin: 1,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  title: {
+    textAlign: 'center',
+    fontSize: 30,
+    backgroundColor: '#46CF42',
+    color: 'white',
+    fontWeight: 'bold',
+    padding: 15,
   },
-  sectionDescription: {
-    marginTop: 8,
+  input: {
+    width: 60,
+    marginRight: 5,
+    padding: 10,
+    color: 'black',
     fontSize: 18,
-    fontWeight: '400',
+    borderWidth: 1,
+    borderRadius: 5,
   },
-  highlight: {
-    fontWeight: '700',
+  input2:{
+    width: 290,
+    marginRight: 5,
+    padding: 10,
+    color: 'black',
+    fontSize: 18,
+    borderWidth: 1,
+    borderRadius: 5,
   },
 });
 

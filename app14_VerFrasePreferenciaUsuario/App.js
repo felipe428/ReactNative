@@ -1,111 +1,122 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React, { Component } from 'react';
+import { StyleSheet, Text, View, Switch, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import Feather from 'react-native-vector-icons/Feather';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
-
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      status: 0,
+      status2: 0,
+    };
   };
 
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+    async componentDidMount(){
+    await AsyncStorage.getItem('status').then((value)=> {
+      this.setState({status: JSON.parse(value)});
+    })
+
+    await AsyncStorage.getItem('status2').then((value2)=> {
+      this.setState({status2: JSON.parse(value2)});
+    })
+  }
+ 
+  async componentDidUpdate(_, prevState){
+    const status = this.state.status;
+    const status2 = this.state.status2;
+ 
+    if(prevState !== status){
+      await AsyncStorage.setItem('status', JSON.stringify(status));
+    }
+
+    if(prevState !== status2){
+      await AsyncStorage.setItem('status2', JSON.stringify(status2));
+    }
+  }
+
+
+  render() {
+
+
+    return (
+      <View style={{backgroundColor: `${(this.state.status == 1) ? "black" : "white"}`,
+      paddingTop: 50
+      }}
+      >
+      <ScrollView>
+        <Text style={{fontSize: `${(this.state.status2 == 1) ? 35 : 25}`,
+          textAlign: 'center',
+          color: `${(this.state.status == 1) ? "white" : "black"}`,
+        }}>Ditados Populares</Text>
+        
+
+        <View style={styles.inline}>
+
+            <View style={{flexDirection: 'row'}}>
+              <Feather style={{marginRight: 10, color: `${(this.state.status == 1) ? "white" : "black"}`}} name='moon' size={35} />
+              <Switch
+                value={(this.state.status2 == 1) ? true : false}
+                onValueChange={ (valorSwitch) => this.setState({status: valorSwitch ? 1 : 0})}
+              />
+            </View>
+
+            <View style={{flexDirection: 'row'}}>
+              <MaterialIcons style={{marginRight: 10, color: `${(this.state.status == 1) ? "white" : "black"}`,}} name="format-size" size={35} />
+              <Switch
+                value={(this.state.status2 == 1) ? true : false}
+                onValueChange={ (valorSwitch) => this.setState({status2: valorSwitch ? 1 : 0})}
+              />
+            </View>
+        
         </View>
+          <Text style={{fontSize: `${(this.state.status2 == 1) ? 20 : 15}`,
+          color: `${(this.state.status == 1) ? "white" : "black"}`,
+          textAlign: 'center', fontStyle: 'italic',
+          }}>
+              “Para bom entendedor, meia palavra basta" {"\n"}
+          </Text>
+
+          <Text style={{fontSize: `${(this.state.status2 == 1) ? 20 : 15}`,
+          color: `${(this.state.status == 1) ? "white" : "black"}`,
+          textAlign: 'center', fontStyle: 'italic',
+          }}>
+            “De grão em grão, a galinha enche o papo” {"\n"}
+          </Text>
+
+          <Text style={{fontSize: `${(this.state.status2 == 1) ? 20 : 15}`,
+          color: `${(this.state.status == 1) ? "white" : "black"}`,
+          textAlign: 'center', fontStyle: 'italic',
+          }}>
+            “Cada macaco no seu galho”{"\n"}
+          </Text>
+
+          <Text style={{fontSize: `${(this.state.status2 == 1) ? 20 : 15}`,
+          color: `${(this.state.status == 1) ? "white" : "black"}`,
+          textAlign: 'center', fontStyle: 'italic',
+          }}>
+            “Casa de ferreiro, espeto de pau”{"\n"}
+          </Text>       
       </ScrollView>
-    </SafeAreaView>
-  );
-};
+    </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    paddingTop: 50,
+  }, 
+  titulo: {
+    fontSize: 25,
+    textAlign: 'center',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  inline: {
+    flexDirection:'row',
+    justifyContent: 'space-around',
+    paddingTop: 50,
+    paddingBottom: 50
   },
 });
 
