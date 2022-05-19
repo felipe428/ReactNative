@@ -1,4 +1,4 @@
-package com.app17_consultacep.newarchitecture.components;
+package com.app17_apiconsultacep.newarchitecture.components;
 
 import com.facebook.jni.HybridData;
 import com.facebook.proguard.annotations.DoNotStrip;

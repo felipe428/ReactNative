@@ -1,5 +1,5 @@
 {
-  "name": "app17_consultacep",
+  "name": "app17_apiconsultacep",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -10,8 +10,10 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "react": "17.0.2",
-    "react-native": "0.68.2"
+    "react-native": "0.68.2",
+    "react-native-vector-icons": "^9.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

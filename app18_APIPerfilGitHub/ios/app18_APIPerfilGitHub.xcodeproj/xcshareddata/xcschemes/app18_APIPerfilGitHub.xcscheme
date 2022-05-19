@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "app18_APIPerfilGitHub.app"
-               BlueprintName = "app18_APIPerfilGitHub"
-               ReferencedContainer = "container:app18_APIPerfilGitHub.xcodeproj">
+               BuildableName = "app18_APIPerfilGithub.app"
+               BlueprintName = "app18_APIPerfilGithub"
+               ReferencedContainer = "container:app18_APIPerfilGithub.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "app18_APIPerfilGitHubTests.xctest"
-               BlueprintName = "app18_APIPerfilGitHubTests"
-               ReferencedContainer = "container:app18_APIPerfilGitHub.xcodeproj">
+               BuildableName = "app18_APIPerfilGithubTests.xctest"
+               BlueprintName = "app18_APIPerfilGithubTests"
+               ReferencedContainer = "container:app18_APIPerfilGithub.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "app18_APIPerfilGitHub.app"
-            BlueprintName = "app18_APIPerfilGitHub"
-            ReferencedContainer = "container:app18_APIPerfilGitHub.xcodeproj">
+            BuildableName = "app18_APIPerfilGithub.app"
+            BlueprintName = "app18_APIPerfilGithub"
+            ReferencedContainer = "container:app18_APIPerfilGithub.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "app18_APIPerfilGitHub.app"
-            BlueprintName = "app18_APIPerfilGitHub"
-            ReferencedContainer = "container:app18_APIPerfilGitHub.xcodeproj">
+            BuildableName = "app18_APIPerfilGithub.app"
+            BlueprintName = "app18_APIPerfilGithub"
+            ReferencedContainer = "container:app18_APIPerfilGithub.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

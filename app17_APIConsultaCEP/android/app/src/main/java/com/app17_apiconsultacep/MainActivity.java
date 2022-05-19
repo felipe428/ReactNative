@@ -1,4 +1,4 @@
-package com.app17_consultacep;
+package com.app17_apiconsultacep;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -12,7 +12,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "app17_ConsultaCEP";
+    return "app17_APIConsultaCEP";
   }
 
   /**

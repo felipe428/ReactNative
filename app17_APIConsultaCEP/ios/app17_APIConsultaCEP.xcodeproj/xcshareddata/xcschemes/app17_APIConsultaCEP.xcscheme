@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "app17_ConsultaCEP.app"
-               BlueprintName = "app17_ConsultaCEP"
-               ReferencedContainer = "container:app17_ConsultaCEP.xcodeproj">
+               BuildableName = "app17_APIConsultaCEP.app"
+               BlueprintName = "app17_APIConsultaCEP"
+               ReferencedContainer = "container:app17_APIConsultaCEP.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "app17_ConsultaCEPTests.xctest"
-               BlueprintName = "app17_ConsultaCEPTests"
-               ReferencedContainer = "container:app17_ConsultaCEP.xcodeproj">
+               BuildableName = "app17_APIConsultaCEPTests.xctest"
+               BlueprintName = "app17_APIConsultaCEPTests"
+               ReferencedContainer = "container:app17_APIConsultaCEP.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "app17_ConsultaCEP.app"
-            BlueprintName = "app17_ConsultaCEP"
-            ReferencedContainer = "container:app17_ConsultaCEP.xcodeproj">
+            BuildableName = "app17_APIConsultaCEP.app"
+            BlueprintName = "app17_APIConsultaCEP"
+            ReferencedContainer = "container:app17_APIConsultaCEP.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "app17_ConsultaCEP.app"
-            BlueprintName = "app17_ConsultaCEP"
-            ReferencedContainer = "container:app17_ConsultaCEP.xcodeproj">
+            BuildableName = "app17_APIConsultaCEP.app"
+            BlueprintName = "app17_APIConsultaCEP"
+            ReferencedContainer = "container:app17_APIConsultaCEP.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

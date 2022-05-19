@@ -1,4 +1,4 @@
-package com.app17_consultacep.newarchitecture;
+package com.app17_apiconsultacep.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.EmptyReactNativeConfig;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.app17_consultacep.BuildConfig;
-import com.app17_consultacep.newarchitecture.components.MainComponentsRegistry;
-import com.app17_consultacep.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.app17_apiconsultacep.BuildConfig;
+import com.app17_apiconsultacep.newarchitecture.components.MainComponentsRegistry;
+import com.app17_apiconsultacep.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 

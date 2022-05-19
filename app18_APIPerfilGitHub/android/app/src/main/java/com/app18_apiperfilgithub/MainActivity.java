@@ -12,7 +12,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "app18_APIPerfilGitHub";
+    return "app18_APIPerfilGithub";
   }
 
   /**
