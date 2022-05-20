@@ -1,111 +1,121 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React, { Component } from 'react';
+import { StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity, Keyboard, Image, } from 'react-native';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import api from './src/service/api';
 
-import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      perfil: [],
+      perfilValor: '',
+      valorRetorno: '',
+    };
+    this.retorno = this.retorno.bind(this);
+  }
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  async retorno() {
+    let valorPerfil = this.state.perfilValor;
+    const response = await api.get(valorPerfil);
+    this.setState({
+      perfil: response.data,
+    });
+    this.setState({
+      valorRetorno: `
+        ID: ${this.state.perfil.id}
+        Nome: ${this.state.perfil.name} 
+        Repositórios: ${this.state.perfil.public_repos}
+        Seguidores: ${this.state.perfil.followers}
+        Seguindo: ${this.state.perfil.following}
+      `,
+    });
+    Keyboard.dismiss();
+  }
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+  render() {
+    let img = this.state.perfil.avatar_url
+      ? this.state.perfil.avatar_url
+      : 'https://pngimg.com/uploads/github/github_PNG41.png';
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+    return (
+      <View style={styles.container}>
+        <ScrollView>
+          <View style={styles.row}>
+            <Text style={styles.title}>Perfil dos Devs</Text>
+          </View>
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+          <View style={styles.center}>
+            <Image
+            source={{ uri: img }}
+            style={styles.img}
+            />
+          </View>
 
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
+          <View style={styles.row}>
+            <TextInput
+            placeholder="Informe o usuário"
+            style={styles.input}
+            onChangeText={(value) => this.setState({ perfilValor: value })}
+            />
+
+            <TouchableOpacity onPress={this.retorno}>
+              <FontAwesome style={{ marginLeft: 10 }} name="search" size={40} color={'#7536A5'} />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.box}>
+            <Text style={{ fontSize: 20, color: "white" }}>{this.state.valorRetorno}</Text>
+          </View>
+
+        </ScrollView>
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+    paddingTop: 20,
+    backgroundColor: '#6E6D6D'
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  title: {
+    fontSize: 30,
+    textAlign: 'center',
+    color: 'white',
+    backgroundColor: '#7536A5', 
+    padding: 8,
+    borderRadius: 15,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
-  highlight: {
-    fontWeight: '700',
+  center: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 5,
+  },
+  img: {
+    width: 300, 
+    height: 300, 
+    marginVertical: 30,
+    borderRadius: 200,
+  },
+  input: {
+    height: 45,
+    fontSize: 20,
+    padding: 10,
+    width: 300,
+    color: '#4A0184',
+    backgroundColor: '#D3D2D2',
+    borderColor: '#7536A5',
+    borderWidth: 3,
+  },
+  box:{
+    backgroundColor: "#7536A5",
+    margin: 30,
+    borderRadius: 20,
   },
 });
 

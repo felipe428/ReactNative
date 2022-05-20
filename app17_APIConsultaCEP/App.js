@@ -1,111 +1,111 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React, { Component } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Keyboard, } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import api from './src/service/api';
 
-import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      cep: [],
+      cepValor: '',
+      valorRetorno: '',
+    };
+    this.retorno = this.retorno.bind(this);
+  }
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  async retorno() {
+    let valorCep = this.state.cepValor;
+    const response = await api.get(`ws/${valorCep}/json`);
+    this.setState({
+      cep: response.data,
+    });
+    this.setState({
+      valorRetorno: `
+        CEP: ${this.state.cep.cep} \n
+        LOGRADOURO: ${this.state.cep.logradouro} \n
+        BAIRRO: ${this.state.cep.bairro} \n
+        CIDADE: ${this.state.cep.localidade} \n
+        ESTADO: ${this.state.cep.uf}
+      `,
+    });
+    Keyboard.dismiss();
+  }
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
-
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+  render() {
+    return (
+      <View style={styles.container}>
+        <View style={styles.row}>
+          <Text style={styles.title}>CEP x Endereço</Text>
         </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
+
+        <View style={styles.row}>
+          <TextInput
+            placeholder="Informe o CEP: "
+            style={styles.input}
+            onChangeText={(value) => this.setState({ cepValor: value })}
+            keyboardType="numeric"
+          />
+
+          <TouchableOpacity onPress={this.retorno}>
+            <MaterialCommunityIcons
+              style={{ marginLeft: 10 }}
+              name="map-marker-radius"
+              size={40}
+              color={'#3371FF'}
+            />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.box}>
+          <Text style={styles.text}>
+            Informações do endereço:{'\n'}
+            {this.state.valorRetorno}
+          </Text>
+        </View>
+
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+    margin: 1,
+    paddingTop: 20,
+    backgroundColor: '#EEEEEE',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  title: {
+    fontSize: 25,
+    marginBottom: 50,
+    color: '#3371FF',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
-  highlight: {
-    fontWeight: '700',
+  input: {
+    height: 50,
+    fontSize: 20,
+    padding: 10,
+    width: 350,
+    backgroundColor: '#EEEEEE',
+    borderWidth: 1,
+    borderRadius: 5,
+  },
+  text: {
+    color: '#EEEEEE',
+    fontSize: 16,
+  },
+  box: {
+    backgroundColor: '#3371FF',
+    color: 'white',
+    marginTop: 50,
+    margin: 10,
+    borderRadius: 10,
+    padding: 20,
+    borderWidth: 1,
   },
 });
 

@@ -1,112 +1,220 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
+import React, { Component } from 'react';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import api from './src/service/api';
 
-import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      valor: '',
+      de: 'BRL',
+      para: 'USD',
+      resultado: [],
+    };
+    this.converter = this.converter.bind(this);
+  }
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+  async converter() {
+    if (this.state.valor == '') {
+      this.setState({ resultado: 'Digite o valor!' });
+    } else {
+      let valor = parseInt(this.state.valor);
+      let de = this.state.de;
+      let para = this.state.para;
+      let final = this.state.de + this.state.para;
+      console.log(this.state.valor, this.state.de, this.state.para);
+      let response = await api.get(
+        `https://economia.awesomeapi.com.br/json/last/${de}-${para}`
+      );
+      var resultado = 0;
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+      switch (de) {
+        case 'BRL':
+          switch (para) {
+            case 'USD':
+              resultado = (response.data.BRLUSD.bid * valor).toFixed(2);
+              break;
+            case 'EUR':
+              resultado = (response.data.BRLEUR.bid * valor).toFixed(2);
+              break;
+          }
+          break;
+        case 'USD':
+          switch (para) {
+            case 'BRL':
+              resultado = (response.data.USDBRL.bid * valor).toFixed(2);
+              break;
+            case 'EUR':
+              resultado = (response.data.USDEUR.bid * valor).toFixed(2);
+              break;
+          }
+          break;
+        case 'EUR':
+          switch (para) {
+            case 'USD':
+              resultado = (response.data.EURUSD.bid * valor).toFixed(2);
+              break;
+            case 'BRL':
+              resultado = (response.data.EURBRL.bid * valor).toFixed(2);
+              break;
+          }
+          break;
+        case 'BTC':
+          switch (para) {
+            case 'USD':
+              resultado = (response.data.BTCUSD.bid * valor).toFixed(2);
+              break;
+            case 'EUR':
+              resultado = (response.data.BTCEUR.bid * valor).toFixed(2);
+              break;
+            case 'BRL':
+              resultado = (response.data.BTCBRL.bid * valor * 1000).toFixed(2);
+              break;
+          }
+          break;
+      }
+      console.log(resultado);
+      this.setState({
+        resultado: resultado,
+      });
+    }
+  }
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+  render() {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.title}>Conversor de Moedas</Text>
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
+        <View style={styles.group}>
+          <Text style={styles.text}>Valor</Text>
+          <TextInput
+            style={styles.input}
+            keyboardType="numeric"
+            placeholder="Digite o valor"
+            value={this.state.valor}
+            onChangeText={(value) => {
+              this.setState({ valor: value });
+            }}
+          />
         </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
+
+        <View style={styles.group}>
+          <Text style={styles.text}>De:</Text>
+          <Picker
+            style={styles.picker}
+            selectedValue={this.state.de}
+            onValueChange={(valor) => {
+              this.setState({ de: valor });
+            }}>
+            <Picker.Item key={1} value={'BRL'} label="Real" />
+            <Picker.Item key={2} value={'USD'} label="Dólar" />
+            <Picker.Item key={3} value={'EUR'} label="Euro" />
+            <Picker.Item key={4} value={'BTC'} label="Bitcoin" />
+          </Picker>
+        </View>
+
+        <View style={styles.group}>
+          <Text style={styles.text}>Para:</Text>
+          <Picker
+            style={styles.picker}
+            selectedValue={this.state.para}
+            onValueChange={(valor) => {
+              this.setState({ para: valor });
+            }}>
+            <Picker.Item key={1} value={'BRL'} label="Real" />
+            <Picker.Item key={2} value={'USD'} label="Dólar" />
+            <Picker.Item key={3} value={'EUR'} label="Euro" />
+            <Picker.Item key={4} value={'BTC'} label="Bitcoin" />
+          </Picker>
+        </View>
+
+        <TouchableOpacity
+          style={styles.buttom}
+          onPress={this.converter}>
+          <Text
+            style={styles.buttomText}>
+            Converter
+          </Text>
+        </TouchableOpacity>
+
+        <View>
+          <Text
+            style={styles.result}>
+            {this.state.resultado}
+          </Text>
+        </View>
+      </View>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  title: {
+    textAlign: 'center',
+    fontSize: 30,
+    backgroundColor: '#17AC34',
+    color: 'white',
+    padding: 15,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
+  input: {
+    width: '70%',
+    height: 45,
+    borderWidth: 2,
+    borderRadius: 10,
+    marginLeft: 25,
+    fontSize: 20,
+    padding: 10,
+    color: '#044A12',
+    borderColor: 'black',
+    textAlign: 'center',
+    marginTop: 30,
   },
-  highlight: {
-    fontWeight: '700',
+  group: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    margin: 10,
   },
+  text: {
+    fontSize: 25,
+    color: '#0A6D1D',
+    marginTop: 30,
+  },
+  picker: {
+    fontSize: 30,
+    marginTop: 25,
+    marginLeft: 30,
+    width: 120,
+  },
+  buttom: {
+    marginTop: 40,
+    marginBottom: 20,
+    borderRadius: 10,
+    backgroundColor: '#17AC34',
+    color: 'white',
+    padding: 15,
+    marginLeft: 10,
+    borderWidth: 1,
+    margin: 10,
+    alignItems: 'center',
+    textAlign: 'center',
+    justifyContent: 'center',
+  },
+  buttomText: {
+    fontSize: 22,
+    marginRight: 10,
+    color: 'white',
+    alignItems: 'center',
+  },
+  result: {
+    fontSize: 26,
+    margin: 10,
+    color: '#044A12',
+    textAlign: 'center',
+  }
 });
 
 export default App;
