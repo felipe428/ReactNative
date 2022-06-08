@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StatusBar, TextInput, FlatList, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet } from "react-native";
 import { openDatabase } from "react-native-sqlite-storage";
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
- 
+
 const db = openDatabase({
   name: "rn_sqlite",
 });
